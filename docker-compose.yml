@@ -1,0 +1,41 @@
+version: '1'
+
+services:
+  back:
+    build: ./backend # Esto le dice a Docker Compose dónde encontrar el Dockerfile (en el directorio actual)
+    ports:
+      - "3000:3000" # Mapea el puerto 3000 del contenedor al puerto 3000 de tu máquina local
+    environment:
+      - NODE_ENV=development # O cualquier otra variable de entorno que necesites
+    volumes:
+      - ./backend:/back
+      - /back/node_modules
+    depends_on:
+      - database
+
+  database:
+      image: mysql:8.3.0
+      #volumes: 
+      #  - database:/data/db
+      volumes:
+      - ./backend/data/create_table.sql:/docker-entrypoint-initdb.d/create_table.sql
+      ports:
+        - 3306:3306
+        - 33060:33060
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=prueba
+        - MYSQL_USER=user
+        - MYSQL_PASSWORD=user
+  
+  front:
+    build: ./frontend
+    volumes:
+      - ./frontend:/front
+      - /front/node_modules
+    ports:
+      - "19000:19000"
+      - "19001:19001"
+      - "19002:19002"
+    depends_on:
+      - back
