@@ -1,29 +1,25 @@
-# Usa la misma versión de Node que el back-end
+# Usamos la imagen base de Node.js
 FROM node:21
 
-# Instala expo-cli globalmente
-RUN npm install -g expo-cli
+# Configura el directorio de trabajo dentro del contenedor
+WORKDIR /app
 
-# Opcionalmente, instala @expo/ngrok globalmente para evitar cualquier solicitud interactiva
-# Aunque este paso no es estrictamente necesario si ya no aparecen solicitudes de instalación interactiva
-RUN npm install -g @expo/ngrok@^4.1.0
-
-# Configura el directorio de trabajo
-WORKDIR /front
-
-# Copia los archivos del proyecto Expo al contenedor
-COPY . .
+# Copia el archivo package.json y package-lock.json (si existe)
+COPY package*.json ./
 
 # Instala las dependencias del proyecto
 RUN npm install
 
-# Expone el puerto predeterminado de Expo (19000 para el paquete, 19001 para Metro Bundler)
-# Además de los puertos para el túnel ngrok que Expo podría utilizar
+# Instala expo-cli globalmente dentro del contenedor
+RUN npm install -g @expo/cli
+
+RUN npm install -g @expo/ngrok@^4.1.0
+
+# Copia los archivos del proyecto al contenedor
+COPY . .
+
+# Expo CLI utiliza el puerto 19000 por defecto
 EXPOSE 19000
-EXPOSE 19001
-# Expo Developer Tools
-EXPOSE 19002 
 
-
-# Inicia la aplicación Expo en modo no interactivo
-CMD ["npx", "expo", "start", "--tunnel", "--non-interactive"]
+# Comando para iniciar la aplicación Expo
+CMD ["nox", "expo", "start", "--tunnel"]

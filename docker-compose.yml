@@ -33,9 +33,16 @@ services:
     volumes:
       - ./frontend:/front
       - /front/node_modules
+    stdin_open: true # Equivalente a -i en docker run
+    tty: true        # Equivalente a -t en docker run
     ports:
       - "19000:19000"
       - "19001:19001"
       - "19002:19002"
+    environment:
+      - NODE_ENV=development
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
+      - CHOKIDAR_USEPOLLING=true
+    command: npx expo start --tunnel
     depends_on:
       - back
