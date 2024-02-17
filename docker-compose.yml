@@ -1,4 +1,4 @@
-version: '1'
+version: '3.8'
 
 services:
   back:
@@ -8,8 +8,8 @@ services:
     environment:
       - NODE_ENV=development # O cualquier otra variable de entorno que necesites
     volumes:
-      - ./backend:/back
-      - /back/node_modules
+      - ./backend:/app
+      - /app/node_modules
     depends_on:
       - database
 
@@ -31,8 +31,8 @@ services:
   front:
     build: ./frontend
     volumes:
-      - ./frontend:/front
-      - /front/node_modules
+      - ./frontend:/app
+      - /app/node_modules
     stdin_open: true # Equivalente a -i en docker run
     tty: true        # Equivalente a -t en docker run
     ports:

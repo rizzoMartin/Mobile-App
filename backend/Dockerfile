@@ -2,7 +2,7 @@
 FROM node:21
 
 # Establecer el directorio de trabajo en el contenedor
-WORKDIR /back
+WORKDIR /app
 
 # Instalar dockerize
 ENV DOCKERIZE_VERSION v0.6.1
@@ -23,4 +23,4 @@ COPY . .
 EXPOSE 3000
 
 # Usar dockerize para esperar a la base de datos antes de iniciar la aplicación
-CMD dockerize -wait tcp://database:3306 -timeout 30s npm start
+CMD dockerize -wait tcp://database:3306 -timeout 100s npm start
