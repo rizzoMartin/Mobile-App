@@ -22,4 +22,4 @@ COPY . .
 EXPOSE 19000
 
 # Comando para iniciar la aplicación Expo
-CMD ["nox", "expo", "start", "--tunnel"]
+CMD ["npx", "expo", "start", "--tunnel"]
