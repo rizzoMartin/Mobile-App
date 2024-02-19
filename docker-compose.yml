@@ -11,7 +11,8 @@ services:
       - ./backend:/app
       - /app/node_modules
     depends_on:
-      - database
+      database:
+        condition: service_healthy
 
   database:
       image: mysql:8.3.0
@@ -27,6 +28,12 @@ services:
         - MYSQL_DATABASE=prueba
         - MYSQL_USER=user
         - MYSQL_PASSWORD=user
+      healthcheck:
+        test: ["CMD-SHELL", "mysql --user=user --password=user --database=prueba -e 'SELECT 1'"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+        start_period: 10s
   
   front:
     build: ./frontend
