@@ -14,7 +14,7 @@ RUN npm install
 RUN npm install -g @expo/cli
 
 RUN npm install -g @expo/ngrok@^4.1.0
-
+RUN npx expo install react-native-web react-dom @expo/metro-runtime
 # Copia los archivos del proyecto al contenedor
 COPY . .
 
