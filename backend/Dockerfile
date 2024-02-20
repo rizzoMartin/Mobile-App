@@ -1,5 +1,5 @@
 # Elegir la versión de node.js a utilizar
-FROM node:21
+FROM node:18-alpine3.19
 
 # Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
