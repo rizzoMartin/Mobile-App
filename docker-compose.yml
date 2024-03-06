@@ -43,6 +43,7 @@ services:
     stdin_open: true # Equivalente a -i en docker run
     tty: true        # Equivalente a -t en docker run
     ports:
+      - "8081:8081"
       - "19000:19000"
       - "19001:19001"
       - "19002:19002"

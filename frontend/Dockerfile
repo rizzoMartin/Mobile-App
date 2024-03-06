@@ -14,7 +14,10 @@ RUN npm install
 COPY . .
 
 # Expo CLI utiliza el puerto 19000 por defecto
+EXPOSE 8081
 EXPOSE 19000
+EXPOSE 19001
+EXPOSE 19002
 
 # Comando para iniciar la aplicación Expo
 CMD ["npx", "expo", "start", "--tunnel"]
