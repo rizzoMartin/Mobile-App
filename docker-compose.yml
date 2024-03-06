@@ -51,6 +51,5 @@ services:
       - NODE_ENV=development
       - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
       - CHOKIDAR_USEPOLLING=true
-    command: npx expo start --tunnel
     depends_on:
       - back

@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Iniciar la app
-CMD npm start
+CMD ["npm", "start"]
