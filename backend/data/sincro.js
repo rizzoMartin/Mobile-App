@@ -1,5 +1,5 @@
 const sequelize = require('./db');
-require('./models/miTablaModel');
+require('./models/userModel');
 
 const initDatabase = () => {
   return sequelize.sync().then(() => {

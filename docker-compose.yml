@@ -19,20 +19,20 @@ services:
       #volumes: 
       #  - database:/data/db
       volumes:
-      - ./backend/data/create_table.sql:/docker-entrypoint-initdb.d/create_table.sql
+      - ./database/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
       ports:
         - 3306:3306
         - 33060:33060
       environment:
         - MYSQL_ROOT_PASSWORD=root
-        - MYSQL_DATABASE=prueba
+        - MYSQL_DATABASE=TFG
         - MYSQL_USER=user
         - MYSQL_PASSWORD=user
       healthcheck:
-        test: ["CMD-SHELL", "mysql --user=user --password=user --database=prueba -e 'SELECT 1'"]
+        test: ["CMD-SHELL", "mysql --user=user --password=user --database=TFG -e 'SELECT 1'"]
         interval: 10s
         timeout: 5s
-        retries: 5
+        retries: 10
         start_period: 10s
   
   front:
