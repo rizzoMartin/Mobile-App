@@ -18,7 +18,7 @@
     
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^7.24.0",
     "@expo/cli": "^0.17.6",
     "@expo/ngrok": "^4.1.0",
     "@expo/metro-runtime": "~3.1.3"
