@@ -13,10 +13,9 @@ services:
 
   database:
       image: mysql:8.0.36
-      #volumes: 
-      #  - database:/data/db
       volumes:
-      - ./database/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+        - database:/var/lib/mysql
+        - ./database/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
       ports:
         - 3306:3306
         - 33060:33060
@@ -32,6 +31,17 @@ services:
         retries: 10
         start_period: 10s
   
+  # Interfaz web para la base de datos (Adminer), para poder visualizar la base de datos
+  adminer:
+    image: adminer
+    restart: always
+    links:
+      # Enlaza el servicio de adminer con el servicio de la base de datos
+      # está configurado para que se pueda acceder a la base de datos con el nombre "db"
+      - database:db
+    ports:
+      - 8080:8080
+
   front:
     build: ./frontend
     stdin_open: true
@@ -45,3 +55,6 @@ services:
       - NODE_ENV=development
     depends_on:
       - back
+
+volumes:
+  database:
