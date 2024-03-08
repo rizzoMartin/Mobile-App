@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `TFG`.`user` (
   `email` VARCHAR(45) NOT NULL,
   `password` VARCHAR(45) NOT NULL,
   `admin` TINYINT(1) NOT NULL DEFAULT 0,
-  `language` VARCHAR(45) NOT NULL DEFAULT 'Spanish',
+  `language` VARCHAR(45) NOT NULL DEFAULT 'spanish',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
