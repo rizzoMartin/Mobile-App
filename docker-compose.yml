@@ -3,10 +3,13 @@ version: '3.8'
 services:
   back:
     build: ./backend
+    volumes:
+      - ./backend:/app
     ports:
-      - "3000:3000"
+      - "3000:3000" 
     environment:
       - NODE_ENV=development
+    command: sh -c "npm install && nodemon --signal SIGTERM index.js"
     depends_on:
       database:
         condition: service_healthy
@@ -44,6 +47,9 @@ services:
 
   front:
     build: ./frontend
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm install && npx expo start --tunnel"
     stdin_open: true
     tty: true
     ports:
