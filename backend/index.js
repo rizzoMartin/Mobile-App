@@ -1,12 +1,24 @@
 const initDatabase = require('./data/sincro');
 const User = require('./data/models/userModel');
 
+//const fs = require('fs');
+//const https = require('https');
+const cors = require('cors');
 const express = require('express');
 const app = express();
+//const PORT = process.env.PORT || 443;
 const PORT = process.env.PORT || 3000;
+
+/*
+const options = {
+  key: fs.readFileSync('./certServ.pem'),
+  cert: fs.readFileSync('./certServ.pem')
+};
+*/
 
 // Middleware para parsear el cuerpo de las solicitudes JSON
 app.use(express.json());
+app.use(cors());
 
 // Ruta para probar que la conexión va
 app.get('/', (req, res) => {
@@ -61,12 +73,23 @@ app.post('/user/registry', async (req, res) => {
   }
 });
 
+
+
 // Inicializar la base de datos y luego iniciar el servidor
+
 initDatabase().then(() => {
   server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
   });
 });
+
+/*
+initDatabase().then(() => {
+  server = https.createServer(options, app).listen(PORT, () => {
+    console.log(`Server running on port ${PORT} with HTTPS`);
+  });
+});
+*/
 
 // Manejar las señales de finalización del programa
 process.on('SIGTERM', () => {

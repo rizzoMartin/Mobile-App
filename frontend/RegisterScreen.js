@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Button, TextInput, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { styles } from './Styles';
+import axios from 'axios';
 
 const RegisterScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -25,26 +26,12 @@ const RegisterScreen = ({ navigation }) => {
 
     try{
       // para que vaya debo tener el movil conectado a la misma wifi que el pc y cambiar la ip siempre que cambie de wifi o pc
-      const response = await fetch('http://192.168.1.39:3000/user/registry', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData)
-      });
-
-      //console.log(response)
-      const result = await response.json();
-      if (!response.ok) {
-        throw new Error(result.message || 'Error desconocido');
-      }
-
-      console.log(result.message);
+      const response = await axios.post('http://192.168.1.39:3000/user/registry', userData);
+      console.log(response.data.message);
       alert('Usuario añadido correctamente');
-
     } catch (error) {
       console.log(error);
-      alert(error);
+      alert(error.response ? error.response.data.message : error);
     }
   }
 
