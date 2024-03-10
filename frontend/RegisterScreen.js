@@ -24,21 +24,24 @@ const RegisterScreen = ({ navigation }) => {
     };
 
     try{
-      const response = await fetch('http://back:3000/user/registry', {
+      // para que vaya debo tener el movil conectado a la misma wifi que el pc y cambiar la ip siempre que cambie de wifi o pc
+      const response = await fetch('http://192.168.1.39:3000/user/registry', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(userData)
       });
-      console.log(response)
+
+      //console.log(response)
+      const result = await response.json();
       if (!response.ok) {
-        throw new Error('Error en la solicitud');
+        throw new Error(result.message || 'Error desconocido');
       }
 
-      const result = await response.json();
-      console.log(result);
-      alert('Usuario añadido correctamente')
+      console.log(result.message);
+      alert('Usuario añadido correctamente');
+
     } catch (error) {
       console.log(error);
       alert(error);
