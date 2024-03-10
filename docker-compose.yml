@@ -60,7 +60,6 @@ services:
       - "19002:19002"
     environment:
       - NODE_ENV=development
-      - NODE_TLS_REJECT_UNAUTHORIZED=0
     depends_on:
       - back
 
