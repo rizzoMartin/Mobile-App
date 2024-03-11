@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `TFG`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `username` VARCHAR(25) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
-  `password` VARCHAR(45) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
   `admin` TINYINT(1) NOT NULL DEFAULT 0,
   `language` VARCHAR(45) NOT NULL DEFAULT 'spanish',
   PRIMARY KEY (`id`),

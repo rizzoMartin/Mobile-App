@@ -26,8 +26,9 @@ const RegisterScreen = ({ navigation }) => {
 
     try{
       // para que vaya debo tener el movil conectado a la misma wifi que el pc y cambiar la ip siempre que cambie de wifi o pc
-      const response = await axios.post('http://192.168.1.39:3000/user/registry', userData);
-      console.log(response.data.message);
+      // (no va con eduroam)
+      const response = await axios.post('http://192.168.22.239:3000/user/registry', userData);
+      console.log(response.data.email);
       alert('Usuario añadido correctamente');
     } catch (error) {
       console.log(error);
