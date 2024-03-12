@@ -38,6 +38,11 @@ const App = () => {
 
   useEffect(() => {
     getData();
+    const interval = setInterval(() => {
+      getData();
+    }, 500);
+
+    clearInterval(interval);
   }, []);
 
   return(

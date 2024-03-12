@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, Button, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, Button, Pressable  } from 'react-native';
 import { styles } from './Styles';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
@@ -15,9 +14,11 @@ const HomeScreen = ({ navigation }) => {
   return(
     <View style={styles.container}>
       <Text> Home Screen </Text>
-      <Button title='Log Out' onPress={() => {
+      <Pressable style={ styles.button } onPress={() => {
         logOut();
-      }} />
+      }}>
+        <Text> Log Out </Text>
+      </Pressable>
     </View>
   );
 }

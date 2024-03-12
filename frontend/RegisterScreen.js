@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Pressable } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { styles } from './Styles';
 import axios from 'axios';
@@ -27,7 +27,7 @@ const RegisterScreen = ({ navigation }) => {
     try{
       // para que vaya debo tener el movil conectado a la misma wifi que el pc y cambiar la ip siempre que cambie de wifi o pc
       // (no va con eduroam)
-      const response = await axios.post('http://192.168.2.217:3000/user/registry', userData);
+      const response = await axios.post('http://192.168.22.239:3000/user/registry', userData);
       console.log(response.data.email);
       alert('Usuario añadido correctamente');
       navigation.navigate('User');
@@ -53,9 +53,9 @@ const RegisterScreen = ({ navigation }) => {
           <Picker.Item label="🇬🇧 Inglés" value="english" />
         </Picker>
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => sendToBack()}>
+      <Pressable style={styles.button} onPress={() => sendToBack()}>
         <Text style={styles.text}> Registrarse </Text>
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 }
