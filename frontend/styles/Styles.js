@@ -46,5 +46,20 @@ export const styles = StyleSheet.create({
   },
   picker : {
     width: '100%',
-  }
+  },
+  gridItem: {
+    flex: 1,
+    margin: 10,
+    height: 100, // Ajusta la altura según sea necesario
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 0.5,
+    borderRadius: 10,
+    borderColor: '#656176',
+    backgroundColor: '#DECDF5',
+    elevation: 10,
+  },
+  gridItemText: {
+    fontSize: 16,
+  },
 });

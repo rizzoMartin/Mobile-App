@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { Text, View, Pressable } from 'react-native';
-import { styles } from './Styles';
+import { styles } from '../styles/Styles';
 
 const UserScreen = ({ navigation }) => {
   return (
