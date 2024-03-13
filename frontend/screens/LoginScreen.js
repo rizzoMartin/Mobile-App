@@ -3,6 +3,7 @@ import { View, Text, TextInput, Pressable } from 'react-native';
 import { styles } from '../styles/Styles';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import ip from '../context/ip';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -18,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
     try{
       // para que vaya debo tener el movil conectado a la misma wifi que el pc y cambiar la ip siempre que cambie de wifi o pc
       // (no va con eduroam)
-      const response = await axios.post('http://192.168.2.211:3000/user/login', userData);
+      const response = await axios.post(`http://${ip}:3000/user/login`, userData);
       console.log(response.data.email);
       login(response.data.email);
     } catch (error) {

@@ -3,6 +3,7 @@ import { View, Text, TextInput, Pressable } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { styles } from '../styles/Styles';
 import axios from 'axios';
+import ip from '../context/ip';
 
 const RegisterScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -27,7 +28,7 @@ const RegisterScreen = ({ navigation }) => {
     try{
       // para que vaya debo tener el movil conectado a la misma wifi que el pc y cambiar la ip siempre que cambie de wifi o pc
       // (no va con eduroam)
-      const response = await axios.post('http://192.168.2.211:3000/user/registry', userData);
+      const response = await axios.post(`http://${ip}:3000/user/registry`, userData);
       console.log(response.data.email);
       alert('Registrado correctamente');
       navigation.navigate('User');
