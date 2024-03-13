@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import UserScreen from './UserScreen';
 import LoginScreen from './LoginScreen';
 import RegisterScreen from './RegisterScreen';
 import HomeScreen from './HomeScreen';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthProvider, useAuth } from './AuthContext';
+
 
 const LoginNav = () => {
   const Stack = createNativeStackNavigator();
@@ -28,27 +29,21 @@ const LoggedNav = () => {
   );
 }
 
-const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  async function getData(){
-    const data = await AsyncStorage.getItem('isLoggedIn');
-    setIsLoggedIn(data);
-  }
-
-  useEffect(() => {
-    getData();
-    const interval = setInterval(() => {
-      getData();
-    }, 500);
-
-    clearInterval(interval);
-  }, []);
+const AppContent = () => {
+  const { user } = useAuth();
 
   return(
     <NavigationContainer>
-      {isLoggedIn ? <LoggedNav/> : <LoginNav/>}
+      {user !== null ? <LoggedNav/> : <LoginNav/>}
     </NavigationContainer>
+  );
+};
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 };
 

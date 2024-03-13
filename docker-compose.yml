@@ -33,7 +33,7 @@ services:
         interval: 5s
         timeout: 5s
         retries: 10
-        start_period: 5s
+        start_period: 3s
   
   # Interfaz web para la base de datos (Adminer), para poder visualizar la base de datos
   adminer:

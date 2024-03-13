@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import { styles } from './Styles';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useAuth } from './AuthContext';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const { login } = useAuth();
 
   const sendToBack = async () => {
     const userData = {
@@ -19,8 +20,8 @@ const LoginScreen = ({ navigation }) => {
       // (no va con eduroam)
       const response = await axios.post('http://192.168.22.239:3000/user/login', userData);
       console.log(response.data.email);
+      login(response.data.email);
       alert('Usuario autenticado correctamente');
-      AsyncStorage.setItem('isLoggedIn', JSON.stringify(true));
       return true;
     } catch (error) {
       console.log(error);

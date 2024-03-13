@@ -50,7 +50,7 @@ const RegisterScreen = ({ navigation }) => {
           style={styles.picker}
         >
           <Picker.Item label="🇪🇸 Español" value="spanish" />
-          <Picker.Item label="🇬🇧 Inglés" value="english" />
+          {/* <Picker.Item label="🇬🇧 Inglés" value="english" /> */}
         </Picker>
       </View>
       <Pressable style={styles.button} onPress={() => sendToBack()}>

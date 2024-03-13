@@ -1,21 +1,18 @@
-import React, { useState } from 'react';
-import { View, Text, Button, Pressable  } from 'react-native';
+import React from 'react';
+import { View, Text, Pressable } from 'react-native';
 import { styles } from './Styles';
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
+import { useAuth } from './AuthContext';
 
 const HomeScreen = ({ navigation }) => {
-  
-  const logOut = () => {
-    AsyncStorage.setItem('isLoggedIn', JSON.stringify(false));
-    navigation.navigate('LoginNav');
-  }
+
+  const { user, logout} = useAuth();
 
   return(
     <View style={styles.container}>
-      <Text> Home Screen </Text>
+      <Text> {user !== null ? user : 'error'} </Text>
       <Pressable style={ styles.button } onPress={() => {
-        logOut();
+        logout();
+        navigation.navigate('LoginNav');
       }}>
         <Text> Log Out </Text>
       </Pressable>
