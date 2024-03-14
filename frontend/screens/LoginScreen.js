@@ -21,10 +21,10 @@ const LoginScreen = ({ navigation }) => {
       // (no va con eduroam)
       const response = await axios.post(`http://${ip}:3000/user/login`, userData);
       console.log(response.data.email);
-      login(response.data.email);
+      login(response.data);
     } catch (error) {
       console.log(error);
-      alert(error.response ? error.response.data.message : error);
+      alert(error.response ? error.response.data.error : error);
     }
   }
 

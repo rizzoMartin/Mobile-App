@@ -34,7 +34,7 @@ const RegisterScreen = ({ navigation }) => {
       navigation.navigate('User');
     } catch (error) {
       console.log(error);
-      alert(error.response ? error.response.data.message : error);
+      alert(error.response ? error.response.data.error : error);
     }
   }
 

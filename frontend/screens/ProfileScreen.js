@@ -7,7 +7,8 @@ const ProfileScreen = () => {
   const { user, logout } = useAuth();
   return (
     <View style={styles.container}>
-      <Text>{user}</Text>
+      <Text>{user.username}</Text>
+      <Text>{user.email}</Text>
       <Pressable style={styles.button } onPress={() => {
         logout();
       }}>

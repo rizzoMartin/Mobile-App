@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LoadingScreen from '../screens/LoadingScreen';
 
 // Crear el Context
 const AuthContext = createContext();
@@ -12,6 +13,7 @@ export function useAuth() {
 // Componente proveedor
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const login = async (userData) => {
     try {
@@ -41,17 +43,22 @@ export const AuthProvider = ({ children }) => {
           setUser(userData);
         }
       } catch (error) {
-
         console.error("Error cargando los datos del usuario ", error);
       }
+      setLoading(false);
     };
 
     loadUserData();
   }, [])
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  if(loading) {
+    return <LoadingScreen />
+  }
+  else{
+    return (
+      <AuthContext.Provider value={{ user, login, logout }}>
+        {children}
+      </AuthContext.Provider>
+    );
+  }
 };
