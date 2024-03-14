@@ -1,5 +1,6 @@
 const sequelize = require('./db');
 require('./models/userModel');
+require('./models/languageModel');
 
 const initDatabase = () => {
   return sequelize.sync().then(() => {

@@ -1,48 +1,81 @@
 import React from 'react';
-import { SafeAreaView, Text, Pressable, FlatList } from 'react-native';
+import { SafeAreaView, Text, Pressable, FlatList, ImageBackground, View } from 'react-native';
 import { styles } from '../styles/Styles';
-import { useAuth } from '../context/AuthContext';
+
+import spanishIcon from '../assets/flags/espana.png';
+import englishIcon from '../assets/flags/reino-unido.png';
+import frenchIcon from '../assets/flags/francia.png';
+import italianIcon from '../assets/flags/italia.png';
+import germanIcon from '../assets/flags/alemania.png';
+import portugueseIcon from '../assets/flags/portugal.png';
+import chineseIcon from '../assets/flags/china.png';
+import japaneseIcon from '../assets/flags/japon.png';
+import russianIcon from '../assets/flags/rusia.png';
+import ucranianIcon from '../assets/flags/ucrania.png';
+
+const languageIcons = {
+  spanish: spanishIcon,
+  english: englishIcon,
+  french: frenchIcon,
+  italian: italianIcon,
+  german: germanIcon,
+  portuguese: portugueseIcon,
+  chinese: chineseIcon,
+  japanese: japaneseIcon,
+  russian: russianIcon,
+  ucranian: ucranianIcon,
+};
 
 const Languages = [
   {
     id: "1",
-    name: "español"
+    name: "spanish",
+    nombre: "Español"
   },
   {
     id: "2",
-    name: "inglés"
+    name: "english",
+    nombre: "Inglés"
   },
   {
     id: "3",
-    name: "francés"
+    name: "french",
+    nombre: "Francés"
   },
   {
     id: "4",
-    name: "italiano"
+    name: "italian",
+    nombre: "Italiano"
   },
   {
     id: "5",
-    name: "alemán"
+    name: "german",
+    nombre: "Alemán"
   },
   {
     id: "6",
-    name: "portugués"
+    name: "portuguese",
+    nombre: "Portugués"
   },
   {
     id: "7",
-    name: "chino"
+    name: "chinese",
+    nombre: "Chino"
   },
   {
     id: "8",
-    name: "japonés"
+    name: "japanese",
+    nombre: "Japonés"
   },
   {
     id: "9",
-    name: "ruso"
+    name: "russian",
+    nombre: "Ruso"
   },
   {
     id: "10",
-    name: "ucraniano"
+    name: "ucranian",
+    nombre: "Ucraniano"
   }
 ]
 
@@ -56,11 +89,20 @@ const HomeScreen = ({ navigation }) => {
         numColumns={2}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <Pressable style={styles.gridItem} onLongPress={() => {
-            alert('hola ' + item.name);
-          }}>
-            <Text style={styles.gridItemText}>{item.name}</Text>
-          </Pressable>
+          <View style={{ flex: 1, alignItems: 'center', margin: 10 }}>
+            <Pressable style={styles.gridItem}
+            onPress={() => {
+              alert('hola ' + item.nombre);
+            }}
+            >
+              <ImageBackground source={languageIcons[item.name]}
+                style={{width:'100%', height:'100%'}}
+                resizeMode='cover'
+                imageStyle={{ borderRadius: styles.gridItem.borderRadius }}
+              />
+            </Pressable>
+            <Text style={{textAlign: 'center'}}> {item.nombre} </Text>
+          </View>
         )}
       />
     </SafeAreaView>

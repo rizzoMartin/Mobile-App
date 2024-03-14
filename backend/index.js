@@ -1,5 +1,6 @@
 const initDatabase = require('./data/sincro');
 const User = require('./data/models/userModel');
+const Language = require('./data/models/languageModel');
 
 //const fs = require('fs');
 //const https = require('https');
@@ -28,6 +29,20 @@ app.get('/', (req, res) => {
 });
 
 const saltRounds = 10; // Recomendado por la seguridad de bcrypt
+
+app.get('/language', async (req, res) => {
+  try {
+    const languages = await Language.findAll();
+    if (!languages) {
+      res.status(500).json({error: 'No se han podido obtener los idiomas de la base de datos'});
+    } else {
+      res.status(200).json(languages);
+    }
+  } catch (error) {
+    console.log('Error: ', error);
+    res.status(500).json({error: 'No se han podido obtener los idiomas de la base de datos'});
+  }
+});
 
 // login
 app.post('/user/login', async (req, res) => {

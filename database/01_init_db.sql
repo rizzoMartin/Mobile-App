@@ -12,7 +12,7 @@ DROP SCHEMA IF EXISTS `TFG` ;
 -- -----------------------------------------------------
 -- Schema TFG
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `TFG` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `TFG` DEFAULT CHARACTER SET utf8mb4 ;
 USE `TFG` ;
 
 -- -----------------------------------------------------
@@ -24,11 +24,22 @@ CREATE TABLE IF NOT EXISTS `TFG`.`user` (
   `email` VARCHAR(45) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `admin` TINYINT(1) NOT NULL DEFAULT 0,
-  `language` VARCHAR(45) NOT NULL DEFAULT 'spanish',
+  `language` VARCHAR(45) NOT NULL DEFAULT 'Spanish',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `TFG`.`language`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `TFG`.`language` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NOT NULL,
+  `displayName` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 

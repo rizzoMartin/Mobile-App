@@ -51,12 +51,13 @@ export const styles = StyleSheet.create({
     flex: 1,
     margin: 10,
     height: 100, // Ajusta la altura según sea necesario
+    width: '100%',
+    marginBottom: 5,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderRadius: 10,
     borderColor: '#656176',
-    backgroundColor: '#DECDF5',
     elevation: 10,
   },
   gridItemText: {
