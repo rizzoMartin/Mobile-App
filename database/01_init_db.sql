@@ -39,7 +39,46 @@ CREATE TABLE IF NOT EXISTS `TFG`.`language` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
   `displayName` VARCHAR(45) NOT NULL,
+  `imageUrl` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `TFG`.`topic`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `TFG`.`topic` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `topic` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `TFG`.`level`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `TFG`.`level` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `solution` VARCHAR(45) NOT NULL,
+  `type` INT NOT NULL,
+  `word` VARCHAR(45) NULL,
+  `sentence` VARCHAR(255) NULL,
+  `imageUrl` VARCHAR(255) NULL,
+  `topic_id` INT NOT NULL,
+  `language_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `topic_id`, `language_id`),
+  INDEX `fk_level_topic_idx` (`topic_id` ASC) VISIBLE,
+  INDEX `fk_level_language1_idx` (`language_id` ASC) VISIBLE,
+  CONSTRAINT `fk_level_topic`
+    FOREIGN KEY (`topic_id`)
+    REFERENCES `TFG`.`topic` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_level_language1`
+    FOREIGN KEY (`language_id`)
+    REFERENCES `TFG`.`language` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 

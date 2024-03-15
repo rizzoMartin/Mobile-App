@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
-const Language = sequelize.define('language', {
+const Topic = sequelize.define('topic', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -14,14 +14,10 @@ const Language = sequelize.define('language', {
   displayName: {
     type: DataTypes.STRING(45),
     allowNull: false,
-  },
-  imageUrl: {
-    type: DataTypes.STRING(255),
-    allowNull: false,
   }
 }, {
-  tableName: 'language',
+  tableName: 'topic',
   timestamps: false
 });
 
-module.exports = Language;
+module.exports = Topic;

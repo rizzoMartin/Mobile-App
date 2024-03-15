@@ -4,30 +4,6 @@ import { styles } from '../styles/Styles';
 import axios from 'axios';
 import ip from '../context/ip';
 
-import spanishIcon from '../assets/flags/espana.png';
-import englishIcon from '../assets/flags/reino-unido.png';
-import frenchIcon from '../assets/flags/francia.png';
-import italianIcon from '../assets/flags/italia.png';
-import germanIcon from '../assets/flags/alemania.png';
-import portugueseIcon from '../assets/flags/portugal.png';
-import chineseIcon from '../assets/flags/china.png';
-import japaneseIcon from '../assets/flags/japon.png';
-import russianIcon from '../assets/flags/rusia.png';
-import ucranianIcon from '../assets/flags/ucrania.png';
-
-const languageIcons = {
-  spanish: spanishIcon,
-  english: englishIcon,
-  french: frenchIcon,
-  italian: italianIcon,
-  german: germanIcon,
-  portuguese: portugueseIcon,
-  chinese: chineseIcon,
-  japanese: japaneseIcon,
-  russian: russianIcon,
-  ucranian: ucranianIcon,
-};
-
 const HomeScreen = ({ navigation }) => {
   const [languages, setLanguages] = useState([]);
 
@@ -60,7 +36,7 @@ const HomeScreen = ({ navigation }) => {
               navigation.navigate("LevelSelection", {languageName: item.name});
             }}
             >
-              <ImageBackground source={languageIcons[item.name]}
+              <ImageBackground source={{ uri: `http://${ip}:3000/${item.imageUrl}` }}
                 style={{width:'100%', height:'100%'}}
                 resizeMode='cover'
                 imageStyle={{ borderRadius: styles.gridItem.borderRadius }}
