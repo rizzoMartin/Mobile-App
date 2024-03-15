@@ -57,7 +57,7 @@ const HomeScreen = ({ navigation }) => {
           <View style={{ flex: 1, alignItems: 'center', margin: 10 }}>
             <Pressable style={styles.gridItem}
             onPress={() => {
-              alert('hola ' + item.displayName);
+              navigation.navigate("LevelSelection", {languageName: item.name});
             }}
             >
               <ImageBackground source={languageIcons[item.name]}

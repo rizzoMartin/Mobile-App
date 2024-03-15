@@ -1,13 +1,17 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SettingsScreen from '../screens/SettingsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import LevelSelectionScreen from "../screens/LevelSelectionScreen";
 
-const LoggedNav = () => {
-    const Tab = createBottomTabNavigator();
-    return(
-      <Tab.Navigator initialRouteName="Home"
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const BarNav = () => {
+  return(
+    <Tab.Navigator initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
@@ -20,19 +24,27 @@ const LoggedNav = () => {
             iconName = focused ? 'person' : 'person-outline'
           }
     
-          // Puedes retornar cualquier componente aquí que quieras usar como ícono
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: '#DECDF5',
         tabBarInactiveTintColor: '#656176',
         tabBarShowLabel: false,
       })}
-      >
-        <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsScreen} />
-        <Tab.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
-        <Tab.Screen name="Profile" options={{ headerShown: false }} component={ProfileScreen} />
-      </Tab.Navigator>
-    );
-  }
+    >
+      <Tab.Screen name="Settings" options={{ headerShown: false }} component={SettingsScreen} />
+      <Tab.Screen name="Home" options={{ headerShown: false }} component={HomeScreen} />
+      <Tab.Screen name="Profile" options={{ headerShown: false }} component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+}
 
-  export default LoggedNav;
+const LoggedNav = () => {
+  return(
+    <Stack.Navigator>
+      <Stack.Screen name="BarNav" options={{ headerShown: false }} component={BarNav} />
+      <Stack.Screen name="LevelSelection" options={{ headerTitle: 'Home' }} component={LevelSelectionScreen} />
+  </Stack.Navigator>
+  );    
+}
+
+export default LoggedNav;
