@@ -12,7 +12,7 @@ const ProfileScreen = () => {
       <Pressable style={styles.button } onPress={() => {
         logout();
       }}>
-        <Text style={styles.text}>Log Out</Text>
+        <Text style={styles.text}>Desconectarse</Text>
       </Pressable>
     </View>
   );

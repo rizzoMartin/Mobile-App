@@ -4,7 +4,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen'
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import LevelSelectionScreen from "../screens/LevelSelectionScreen";
+import LevelSelectionScreen from '../screens/LevelSelectionScreen';
+import LevelScreen from '../screens/LevelScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -42,7 +43,8 @@ const LoggedNav = () => {
   return(
     <Stack.Navigator>
       <Stack.Screen name="BarNav" options={{ headerShown: false }} component={BarNav} />
-      <Stack.Screen name="LevelSelection" options={{ headerTitle: 'Home' }} component={LevelSelectionScreen} />
+      <Stack.Screen name="LevelSelection" options={{ headerTitle: '' }} component={LevelSelectionScreen} />
+      <Stack.Screen name="Level" options={{ headerShown: false }} component={LevelScreen} />
   </Stack.Navigator>
   );    
 }

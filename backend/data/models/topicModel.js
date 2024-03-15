@@ -7,11 +7,7 @@ const Topic = sequelize.define('topic', {
     autoIncrement: true,
     primaryKey: true
   },
-  name: {
-    type: DataTypes.STRING(45),
-    allowNull: false,
-  },
-  displayName: {
+  topic: {
     type: DataTypes.STRING(45),
     allowNull: false,
   }

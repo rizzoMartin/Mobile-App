@@ -33,7 +33,7 @@ const HomeScreen = ({ navigation }) => {
           <View style={{ flex: 1, alignItems: 'center', margin: 10 }}>
             <Pressable style={styles.gridItem}
             onPress={() => {
-              navigation.navigate("LevelSelection", {languageName: item.name});
+              navigation.navigate("LevelSelection", {languageName: item.name, languageId: item.id});
             }}
             >
               <ImageBackground source={{ uri: `http://${ip}:3000/${item.imageUrl}` }}
