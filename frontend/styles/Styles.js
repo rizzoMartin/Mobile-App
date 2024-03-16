@@ -18,6 +18,26 @@ export const styles = StyleSheet.create({
     backgroundColor: '#DECDF5',
     elevation: 10,
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between', // Esto asegura que los botones se distribuyan en los extremos del contenedor.
+    width: '100%', // Usa el ancho completo para evitar que los botones se salgan.
+    position: 'absolute',
+    bottom: 0,
+    padding: 20, // Ajusta el padding según sea necesario. Asegúrate de que no sea demasiado grande.
+  },
+  buttonGame: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    borderWidth: 0.5,
+    borderRadius: 10,
+    borderColor: '#656176',
+    backgroundColor: '#DECDF5',
+    elevation: 10,
+    marginHorizontal: 10, // Añade un poco de espacio horizontal entre los botones
+    // No es necesario definir el width aquí; el flex se encargará de ello.
+    flex: 1, // Permite que los botones expandan equitativamente dentro del contenedor
+  },
   text : {
     color: '#534D56',
     fontSize: 20,
