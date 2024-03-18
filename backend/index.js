@@ -9,7 +9,7 @@ app.get('/', (req, res) => {
 
 // Inicializar la base de datos
 initDatabase().then(() => {
-    app.listen(PORT, () => {
+    server = app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
     });
 });

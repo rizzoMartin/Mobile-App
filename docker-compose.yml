@@ -36,7 +36,7 @@ services:
         test: ["CMD-SHELL", "mysql --user=user --password=user --database=TFG -e 'SELECT 1'"]
         interval: 5s
         timeout: 5s
-        retries: 10
+        retries: 15
         start_period: 3s
   
   # Interfaz web para la base de datos (Adminer), para poder visualizar la base de datos

@@ -35,6 +35,55 @@ const LevelSelectionScreen = ({ navigation, route }) => {
 
   const currentLevelData = levels[currentLevelIndex];
 
+  useEffect(() => {
+    // Solo ejecutar esta lógica una vez que los niveles están cargados y no están vacíos
+    if (!isLoading && levels.length > 0) {
+      const updatedLevels = levels.map(level => {
+        // Para niveles de tipo 2, seleccionar dos palabras aleatorias de otros niveles
+        if (level.type === 2) {
+          const otherWords = levels
+            .filter(otherLevel => otherLevel.word !== level.word)
+            .map(otherLevel => otherLevel.word);
+  
+          if (otherWords.length >= 2) {
+            const selectedWords = [];
+            while (selectedWords.length < 2) {
+              const randomIndex = Math.floor(Math.random() * otherWords.length);
+              const randomWord = otherWords[randomIndex];
+              if (!selectedWords.includes(randomWord)) {
+                selectedWords.push(randomWord);
+              }
+            }
+            return { ...level, hints: selectedWords };
+          }
+        }
+        // Para niveles de tipo 1 y 3, asignar dos letras aleatorias de la palabra del nivel
+        else if (level.type === 1 || level.type === 3) {
+          const word = level.word;
+          const length = word.length;
+          
+          const index1 = Math.floor(Math.random() * length);
+          let index2 = Math.floor(Math.random() * length);
+      
+          while (index2 === index1) {
+            index2 = Math.floor(Math.random() * length);
+          }
+      
+          const letter1 = word[index1];
+          const letter2 = word[index2];
+          
+          return { ...level, hints: [letter1, letter2] };
+        }
+        // Para los niveles que no requieren modificación, retornarlos sin cambios
+        return level;
+      });
+  
+      // Actualizar el estado de levels con esta nueva información
+      setLevels(updatedLevels);
+    }
+  }, [isLoading]); // Dependencias del useEffect
+  
+
   const goNextLevel = () => {
     if (currentLevelIndex < levels.length - 1) {
       setCurrentLevelIndex(currentLevelIndex + 1);
@@ -51,26 +100,6 @@ const LevelSelectionScreen = ({ navigation, route }) => {
       setCurrentLevelIndex(currentLevelIndex - 1);
     }
   }
-
-  const getHint = useCallback(() => {
-    console.log('pista para ' + currentLevelData.word);
-    if (currentLevelData.type === 1 || currentLevelData.type === 2) {
-      const word = currentLevelData.word;
-      const length = word.length;
-      
-      const index1 = Math.floor(Math.random() * length);
-      let index2 = Math.floor(Math.random() * length);
-  
-      while (index2 === index1) {
-        index2 = Math.floor(Math.random() * length);
-      }
-  
-      const letter1 = word[index1];
-      const letter2 = word[index2];
-  
-      console.log(`Letras seleccionadas: ${letter1}, ${letter2}`);
-    }
-  }, [currentLevelData]);
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -107,20 +136,17 @@ const LevelSelectionScreen = ({ navigation, route }) => {
   const LevelComponent = () => {
     switch(currentLevelData.type) {
       case 1:
-        return <LevelType1 levelData={currentLevelData} />;
+        return <LevelType1 levelData={currentLevelData} levels={levels} currentLevelIndex={currentLevelIndex} />;
       case 2:
-        return <LevelType2 levelData={currentLevelData} />;
+        return <LevelType2 levelData={currentLevelData} levels={levels} currentLevelIndex={currentLevelIndex} />;
       case 3:
-        return <LevelType3 levelData={currentLevelData} />;
+        return <LevelType3 levelData={currentLevelData} levels={levels} currentLevelIndex={currentLevelIndex} />;
     }
   };
 
   return (
     <View style={styles.container}>
       <LevelComponent />
-      <Pressable style={styles.button} onPress={getHint}>
-        <Text>Pista</Text>
-      </Pressable>
       <View style={styles.buttonContainer}>
         {currentLevelIndex >= 1 && (
           <Pressable style={styles.buttonGame} onPress={goPreviousLevel}>
