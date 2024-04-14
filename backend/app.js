@@ -6,6 +6,7 @@ const userRoutes = require('./routes/userRoutes');
 const languageRoutes = require('./routes/languageRoutes');
 const levelRoutes = require('./routes/levelRoutes');
 const topicRoutes = require('./routes/topicRoutes');
+const translationRoutes = require('./routes/translationRoutes');
 
 const app = express();
 app.use(cors());
@@ -16,5 +17,6 @@ app.use('/user', userRoutes);
 app.use('/language', languageRoutes);
 app.use('/level', levelRoutes);
 app.use('/topic', topicRoutes);
+app.use('/translation', translationRoutes);
 
 module.exports = app;

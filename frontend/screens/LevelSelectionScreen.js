@@ -6,20 +6,20 @@ import ip from '../context/ip';
 
 
 const LevelSelectionScreen = ({ navigation, route }) => {
-const { languageName, languageId } = route.params;
-const [topics, setTopics] = useState();
+  const { languageName, languageId } = route.params;
+  const [topics, setTopics] = useState();
 
-useEffect(() => {
-  const loadTopics = async () => {
-    try {
-      const response = await axios.get(`http://${ip}:3000/topic`);
-      console.log(response.data);
-      setTopics(response.data);
-    } catch (error) {
-      console.log(error);
-      alert(error.response ? error.response.data.error : error);
+  useEffect(() => {
+    const loadTopics = async () => {
+      try {
+        const response = await axios.get(`http://${ip}:3000/topic`);
+        console.log(response.data);
+        setTopics(response.data);
+      } catch (error) {
+        console.log(error);
+        alert(error.response ? error.response.data.error : error);
+      }
     }
-  }
 
   loadTopics();
   }, []);

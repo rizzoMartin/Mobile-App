@@ -18,6 +18,17 @@ export const styles = StyleSheet.create({
     backgroundColor: '#DECDF5',
     elevation: 10,
   },
+  buttonDisabled: {
+    alignItems: 'center',
+    marginVertical: 30,
+    width: '80%',
+    paddingVertical: 20,
+    borderWidth: 0.5,
+    borderRadius: 10,
+    borderColor: '#656176',
+    backgroundColor: '#BBBBBB',
+    elevation: 10,
+  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between', // Esto asegura que los botones se distribuyan en los extremos del contenedor.
@@ -82,5 +93,18 @@ export const styles = StyleSheet.create({
   },
   gridItemText: {
     fontSize: 16,
+  },
+  inputAnswer : {
+    borderWidth: 2,
+    borderRadius: 10,
+    borderColor: '#DECDF5',
+    backgroundColor: '#F8F1FF',
+    padding: 10,
+    marginVertical: 10,
+    width: '80%',
+    fontSize: 16,
+    elevation: 10,
+    height: 60,
+    letterSpacing: 5
   },
 });

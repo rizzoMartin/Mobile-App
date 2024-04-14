@@ -27,7 +27,7 @@ router.post('/login', async (req, res) => {
 
             if (result) {
                 // Si la comparación es exitosa (las contraseñas coinciden)
-                res.status(200).json({ email: user.email, username: user.username });
+                res.status(200).json({ email: user.email, username: user.username, language: user.language });
             } else {
                 // Si la comparación falla (las contraseñas no coinciden)
                 console.log('Error al comparar contraseñas');

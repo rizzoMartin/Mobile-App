@@ -8,12 +8,15 @@ import LevelType1 from "../components/LevelType1";
 import LevelType2 from "../components/levelType2";
 import LevelType3 from "../components/levelType3";
 
-const LevelSelectionScreen = ({ navigation, route }) => {
+const LevelScreen = ({ navigation, route }) => {
   const { topicId, languageId } = route.params;
   const [levels, setLevels] = useState([]);
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+  const [usedHints, setUsedHints] = useState(new Set());
+  const [placeholders, setPlaceholders] = useState({});
+  const [answers, setAnswers] = useState({});
 
   useEffect(() => {
     const loadLevels = async () => {
@@ -22,6 +25,7 @@ const LevelSelectionScreen = ({ navigation, route }) => {
         const response = await axios.get(`http://${ip}:3000/level/${topicId}/${languageId}`);
         console.log(response.data);
         setLevels(response.data);
+        initializeState(response.data);
       } catch (error) {
         console.error(error);
         alert(error.response ? error.response.data.error : error);
@@ -83,6 +87,24 @@ const LevelSelectionScreen = ({ navigation, route }) => {
     }
   }, [isLoading]); // Dependencias del useEffect
   
+  const initializeState = (levels) => {
+    const newPlaceholders = {};
+    const newAnswers = {};
+    levels.forEach((level, index) => {
+      newPlaceholders[index] = '_'.repeat(level.word.length);
+      newAnswers[index] = '';
+    });
+    setPlaceholders(newPlaceholders);
+    setAnswers(newAnswers);
+  };
+
+  const handleUseHint = () => {
+    setUsedHints(prevHints => {
+      const newHints = new Set(prevHints);
+      newHints.add(currentLevelIndex);
+      return newHints;
+    });
+  };
 
   const goNextLevel = () => {
     if (currentLevelIndex < levels.length - 1) {
@@ -134,9 +156,23 @@ const LevelSelectionScreen = ({ navigation, route }) => {
   }
 
   const LevelComponent = () => {
+    const hintUsed = usedHints.has(currentLevelIndex);
+    const currentPlaceholder = placeholders[currentLevelIndex] || '';
     switch(currentLevelData.type) {
       case 1:
-        return <LevelType1 levelData={currentLevelData} levels={levels} currentLevelIndex={currentLevelIndex} />;
+        return <LevelType1 
+          levelData={currentLevelData}
+          hintUsed={hintUsed}
+          useHint={handleUseHint}
+          placeholder={currentPlaceholder}
+          setPlaceholder={(newPlaceholder) => {
+            setPlaceholders({...placeholders, [currentLevelIndex]: newPlaceholder});
+          }}
+          answer={answers[currentLevelIndex]}
+          setAnswer={(newAnswer) => {
+            setAnswers({...answers, [currentLevelIndex]: newAnswer});
+          }}
+        />;
       case 2:
         return <LevelType2 levelData={currentLevelData} levels={levels} currentLevelIndex={currentLevelIndex} />;
       case 3:
@@ -161,4 +197,4 @@ const LevelSelectionScreen = ({ navigation, route }) => {
   );
 }
 
-export default LevelSelectionScreen;
+export default LevelScreen;

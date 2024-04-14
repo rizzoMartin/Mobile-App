@@ -10,7 +10,7 @@ const RegisterScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmedPassword, setConfirmedPassword] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState('spanish');
+  const [selectedLanguage, setSelectedLanguage] = useState('es');
 
   const sendToBack = async () => {
     if (password !== confirmedPassword) {
@@ -50,8 +50,10 @@ const RegisterScreen = ({ navigation }) => {
           onValueChange={setSelectedLanguage}
           style={styles.picker}
         >
-          <Picker.Item label="🇪🇸 Español" value="spanish" />
-          {/* <Picker.Item label="🇬🇧 Inglés" value="english" /> */}
+          <Picker.Item label="🇪🇸 Español" value="es" />
+          <Picker.Item label="🇬🇧 Inglés" value="en" />
+          <Picker.Item label="🇫🇷 Francés" value="fr" />
+          <Picker.Item label="🇮🇹 Italiano" value="it" />
         </Picker>
       </View>
       <Pressable style={styles.button} onPress={() => sendToBack()}>
