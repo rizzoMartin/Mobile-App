@@ -1,33 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Pressable } from "react-native";
 import { styles } from "../styles/Styles";
 
-const LevelType2 = ({ levelData }) => {
+const LevelType2 = ({ levelData, hintUsed, useHint, options }) => {
+  const [selectedHint, setSelectedHint] = useState(levelData.hints[0]);
+
   const getHint = () => {
-    console.log(levelData.hints);
+    if(!hintUsed){
+      console.log(levelData.hints);
+      useHint();
+    } else {
+      alert("Solo se puede usar una pista por nivel")
+    }
   }
 
-  // Esta función mezcla el arreglo de manera aleatoria
-  const shuffleArray = (array) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]]; // intercambio de elementos
-    }
-    return array;
-  };
-
-  // Combina la palabra del nivel con las pistas y luego mezcla el arreglo
-  const words = shuffleArray([levelData.word, ...levelData.hints]);
+  console.log("Selected hint:", selectedHint);
+  console.log("Available words:", levelData.selectedWords);
 
   return(
     <>
       <Text>{levelData.sentence}</Text>
-      <Pressable style={styles.button} onPress={getHint}>
+      <Pressable style={hintUsed ? styles.buttonDisabled : styles.button} onPress={getHint}>
         <Text>Pista</Text>
       </Pressable>
       <View style={styles.buttonContainer}>
-        {words.map((word, index) => (
-          <Pressable key={index} style={[styles.buttonGame, {marginVertical: 100}]} onPress={() => alert(word)}>
+        {options.map((word, index) => (
+          <Pressable 
+            key={index} 
+            style={word === selectedHint && hintUsed ? styles.buttonGame2Disabled : styles.buttonGame2 } 
+            onPress={() => alert(word)}
+            disabled={word === selectedHint}>
             <Text>{word}</Text>
           </Pressable>
         ))}

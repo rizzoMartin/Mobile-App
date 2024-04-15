@@ -17,6 +17,7 @@ const LevelScreen = ({ navigation, route }) => {
   const [usedHints, setUsedHints] = useState(new Set());
   const [placeholders, setPlaceholders] = useState({});
   const [answers, setAnswers] = useState({});
+  const [shuffledOptions, setShuffledOptions] = useState({});
   const currentLevelRef = useRef(null);
 
   useEffect(() => {
@@ -26,7 +27,16 @@ const LevelScreen = ({ navigation, route }) => {
         const response = await axios.get(`http://${ip}:3000/level/${topicId}/${languageId}`);
         console.log(response.data);
         const data = response.data.map(level => addHints(level, response.data));
+        
+        const mixedWords = {};
+        data.forEach((level, index) => {
+          if (level.type === 2) {
+            mixedWords[index] = shuffleArray([level.word, ...level.selectedWords]);
+          }
+        });
+        
         setLevels(data);
+        setShuffledOptions(mixedWords);
         initializeState(data);
       } catch (error) {
         console.error(error);
@@ -39,10 +49,18 @@ const LevelScreen = ({ navigation, route }) => {
     loadLevels();
   }, [topicId, languageId]); // Dependencias del efecto
 
-  const addHints = (level) => {
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+
+  const addHints = (level, allLevels) => {
     // Para niveles de tipo 2, seleccionar dos palabras aleatorias de otros niveles
     if (level.type === 2) {
-      const otherWords = levels
+      const otherWords = allLevels
         .filter(otherLevel => otherLevel.word !== level.word)
         .map(otherLevel => otherLevel.word);
 
@@ -55,7 +73,10 @@ const LevelScreen = ({ navigation, route }) => {
             selectedWords.push(randomWord);
           }
         }
-        return { ...level, hints: selectedWords };
+        const hintIndex = Math.floor(Math.random() * selectedWords.length);
+        const hints = [selectedWords[hintIndex]];  // 'hints' ahora es un array con una sola palabra
+
+        return { ...level, selectedWords: selectedWords, hints: hints };
       }
     }
     // Para niveles de tipo 1 y 3, asignar dos letras aleatorias de la palabra del nivel
@@ -181,9 +202,27 @@ const LevelScreen = ({ navigation, route }) => {
           ref={currentLevelRef}
         />;
       case 2:
-        return <LevelType2 levelData={currentLevelData} levels={levels} currentLevelIndex={currentLevelIndex} />;
+        return <LevelType2
+          levelData={currentLevelData}
+          hintUsed={hintUsed}
+          useHint={handleUseHint}
+          options={shuffledOptions[currentLevelIndex]}
+        />;
       case 3:
-        return <LevelType3 levelData={currentLevelData} levels={levels} currentLevelIndex={currentLevelIndex} />;
+        return <LevelType3 
+          levelData={currentLevelData}
+          hintUsed={hintUsed}
+          useHint={handleUseHint}
+          placeholder={currentPlaceholder}
+          setPlaceholder={(newPlaceholder) => {
+            setPlaceholders({...placeholders, [currentLevelIndex]: newPlaceholder});
+          }}
+          answer={currentAnswer}
+          setAnswer={(newAnswer) => {
+            setAnswers({...answers, [currentLevelIndex]: newAnswer});
+          }}
+          ref={currentLevelRef}
+        />;
     }
   };
 

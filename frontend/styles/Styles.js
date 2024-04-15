@@ -49,6 +49,32 @@ export const styles = StyleSheet.create({
     // No es necesario definir el width aquí; el flex se encargará de ello.
     flex: 1, // Permite que los botones expandan equitativamente dentro del contenedor
   },
+  buttonGame2: {
+    alignItems: 'center',
+    paddingVertical: 20,
+    borderWidth: 0.5,
+    borderRadius: 10,
+    borderColor: '#656176',
+    backgroundColor: '#DECDF5',
+    elevation: 10,
+    marginHorizontal: 10, // Añade un poco de espacio horizontal entre los botones
+    // No es necesario definir el width aquí; el flex se encargará de ello.
+    flex: 1, // Permite que los botones expandan equitativamente dentro del contenedor
+    marginVertical: 100
+  },
+  buttonGame2Disabled : {
+    alignItems: 'center',
+    paddingVertical: 20,
+    borderWidth: 0.5,
+    borderRadius: 10,
+    borderColor: '#656176',
+    backgroundColor: '#BBBBBB',
+    elevation: 10,
+    marginHorizontal: 10, // Añade un poco de espacio horizontal entre los botones
+    // No es necesario definir el width aquí; el flex se encargará de ello.
+    flex: 1, // Permite que los botones expandan equitativamente dentro del contenedor
+    marginVertical: 100
+  },
   text : {
     color: '#534D56',
     fontSize: 20,
