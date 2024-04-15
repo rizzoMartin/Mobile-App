@@ -1,11 +1,11 @@
-import { React, useEffect, useState } from "react";
+import { React, useEffect, useState, forwardRef, useImperativeHandle } from "react";
 import { Text, Pressable, TextInput, Keyboard } from "react-native";
 import { styles } from "../styles/Styles";
 import axios from "axios";
 import ip from '../context/ip';
 import { useAuth } from '../context/AuthContext';
 
-const LevelType1 = ({ levelData, hintUsed, useHint, placeholder, setPlaceholder, answer, setAnswer }) => {
+const LevelType1 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setPlaceholder, answer, setAnswer }, ref) => {
   const [localAnswer, setLocalAnswer] = useState(answer);
   const [translatedWord, setTranslatedWord] = useState('');
   const { user } = useAuth();
@@ -13,19 +13,16 @@ const LevelType1 = ({ levelData, hintUsed, useHint, placeholder, setPlaceholder,
   useEffect(() => {
     const getWord = async () => {
       try {
-        setIsLoading(true);
         const response = await axios.get(`http://${ip}:3000/translation/${levelData.word}/${user.language}`);
         setTranslatedWord(response.data.message);
       } catch (error){
         console.error(error);
         alert(error.response ? error.response.data.error : error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
     getWord();
-  }, [])
+  }, [levelData]);
 
   useEffect(()=> {
     if(!placeholder) setPlaceholder('_'.repeat(levelData.word.length));
@@ -35,17 +32,9 @@ const LevelType1 = ({ levelData, hintUsed, useHint, placeholder, setPlaceholder,
     setLocalAnswer(answer);  // Actualiza la respuesta local cuando el nivel cambia
   }, [answer]);
 
-  useEffect(() => {
-    const handleKeyboardHide = () => {
-      setAnswer(localAnswer);  // Guarda la respuesta cuando el teclado se oculta
-    };
-
-    const keyboardHideListener = Keyboard.addListener('keyboardDidHide', handleKeyboardHide);
-
-    return () => {
-      keyboardHideListener.remove();  // Limpieza del listener
-    };
-  }, [localAnswer, setAnswer]);
+  useImperativeHandle(ref, () => ({
+    getLatestAnswer: () => localAnswer
+  }));
 
   const getHint = () => {
     if(!hintUsed){
@@ -62,6 +51,7 @@ const LevelType1 = ({ levelData, hintUsed, useHint, placeholder, setPlaceholder,
         }
       });
       setLocalAnswer('');
+      setAnswer('');
       setPlaceholder(currentPlaceholder.join('')); // Actualiza el estado del placeholder
       useHint();
     } else {
@@ -70,7 +60,7 @@ const LevelType1 = ({ levelData, hintUsed, useHint, placeholder, setPlaceholder,
   }
 
   const handleTextChange = (text) => {
-    setLocalAnswer(text);  // Actualiza la respuesta localmente
+    setLocalAnswer(text);
   };
 
   return(
@@ -87,6 +77,6 @@ const LevelType1 = ({ levelData, hintUsed, useHint, placeholder, setPlaceholder,
       />
     </>
   );
-}
+});
 
 export default LevelType1

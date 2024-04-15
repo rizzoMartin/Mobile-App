@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { SafeAreaView, Text, Pressable, View } from "react-native";
 import { styles } from "../styles/Styles";
 import axios from "axios";
@@ -17,6 +17,7 @@ const LevelScreen = ({ navigation, route }) => {
   const [usedHints, setUsedHints] = useState(new Set());
   const [placeholders, setPlaceholders] = useState({});
   const [answers, setAnswers] = useState({});
+  const currentLevelRef = useRef(null);
 
   useEffect(() => {
     const loadLevels = async () => {
@@ -24,8 +25,9 @@ const LevelScreen = ({ navigation, route }) => {
         setIsLoading(true);
         const response = await axios.get(`http://${ip}:3000/level/${topicId}/${languageId}`);
         console.log(response.data);
-        setLevels(response.data);
-        initializeState(response.data);
+        const data = response.data.map(level => addHints(level, response.data));
+        setLevels(data);
+        initializeState(data);
       } catch (error) {
         console.error(error);
         alert(error.response ? error.response.data.error : error);
@@ -37,55 +39,45 @@ const LevelScreen = ({ navigation, route }) => {
     loadLevels();
   }, [topicId, languageId]); // Dependencias del efecto
 
-  const currentLevelData = levels[currentLevelIndex];
+  const addHints = (level) => {
+    // Para niveles de tipo 2, seleccionar dos palabras aleatorias de otros niveles
+    if (level.type === 2) {
+      const otherWords = levels
+        .filter(otherLevel => otherLevel.word !== level.word)
+        .map(otherLevel => otherLevel.word);
 
-  useEffect(() => {
-    // Solo ejecutar esta lógica una vez que los niveles están cargados y no están vacíos
-    if (!isLoading && levels.length > 0) {
-      const updatedLevels = levels.map(level => {
-        // Para niveles de tipo 2, seleccionar dos palabras aleatorias de otros niveles
-        if (level.type === 2) {
-          const otherWords = levels
-            .filter(otherLevel => otherLevel.word !== level.word)
-            .map(otherLevel => otherLevel.word);
-  
-          if (otherWords.length >= 2) {
-            const selectedWords = [];
-            while (selectedWords.length < 2) {
-              const randomIndex = Math.floor(Math.random() * otherWords.length);
-              const randomWord = otherWords[randomIndex];
-              if (!selectedWords.includes(randomWord)) {
-                selectedWords.push(randomWord);
-              }
-            }
-            return { ...level, hints: selectedWords };
+      if (otherWords.length >= 2) {
+        const selectedWords = [];
+        while (selectedWords.length < 2) {
+          const randomIndex = Math.floor(Math.random() * otherWords.length);
+          const randomWord = otherWords[randomIndex];
+          if (!selectedWords.includes(randomWord)) {
+            selectedWords.push(randomWord);
           }
         }
-        // Para niveles de tipo 1 y 3, asignar dos letras aleatorias de la palabra del nivel
-        else if (level.type === 1 || level.type === 3) {
-          const word = level.word;
-          const length = word.length;
-          
-          const index1 = Math.floor(Math.random() * length);
-          let index2 = Math.floor(Math.random() * length);
-      
-          while (index2 === index1) {
-            index2 = Math.floor(Math.random() * length);
-          }
-      
-          const letter1 = word[index1];
-          const letter2 = word[index2];
-          
-          return { ...level, hints: [letter1, letter2] };
-        }
-        // Para los niveles que no requieren modificación, retornarlos sin cambios
-        return level;
-      });
-  
-      // Actualizar el estado de levels con esta nueva información
-      setLevels(updatedLevels);
+        return { ...level, hints: selectedWords };
+      }
     }
-  }, [isLoading]); // Dependencias del useEffect
+    // Para niveles de tipo 1 y 3, asignar dos letras aleatorias de la palabra del nivel
+    else if (level.type === 1 || level.type === 3) {
+      const word = level.word;
+      const length = word.length;
+      
+      const index1 = Math.floor(Math.random() * length);
+      let index2 = Math.floor(Math.random() * length);
+  
+      while (index2 === index1) {
+        index2 = Math.floor(Math.random() * length);
+      }
+  
+      const letter1 = word[index1];
+      const letter2 = word[index2];
+      
+      return { ...level, hints: [letter1, letter2] };
+    }
+    // Para los niveles que no requieren modificación, retornarlos sin cambios
+    return level;
+  };
   
   const initializeState = (levels) => {
     const newPlaceholders = {};
@@ -106,7 +98,18 @@ const LevelScreen = ({ navigation, route }) => {
     });
   };
 
+  const updateAnswerBeforeLeaving = () => {
+    if(currentLevelRef.current) {
+      const updatedAnswer = currentLevelRef.current.getLatestAnswer();
+      setAnswers(prevAnswers => ({
+        ...prevAnswers,
+        [currentLevelIndex]: updatedAnswer
+      }));
+    }
+  };
+
   const goNextLevel = () => {
+    updateAnswerBeforeLeaving();
     if (currentLevelIndex < levels.length - 1) {
       setCurrentLevelIndex(currentLevelIndex + 1);
     } else {
@@ -115,6 +118,7 @@ const LevelScreen = ({ navigation, route }) => {
   };
 
   const goPreviousLevel = () => {
+    updateAnswerBeforeLeaving();
     if (isFinished) {
       setIsFinished(false);
     }
@@ -156,8 +160,10 @@ const LevelScreen = ({ navigation, route }) => {
   }
 
   const LevelComponent = () => {
+    const currentLevelData = levels[currentLevelIndex];
     const hintUsed = usedHints.has(currentLevelIndex);
     const currentPlaceholder = placeholders[currentLevelIndex] || '';
+    const currentAnswer = answers[currentLevelIndex] || '';
     switch(currentLevelData.type) {
       case 1:
         return <LevelType1 
@@ -168,10 +174,11 @@ const LevelScreen = ({ navigation, route }) => {
           setPlaceholder={(newPlaceholder) => {
             setPlaceholders({...placeholders, [currentLevelIndex]: newPlaceholder});
           }}
-          answer={answers[currentLevelIndex]}
+          answer={currentAnswer}
           setAnswer={(newAnswer) => {
             setAnswers({...answers, [currentLevelIndex]: newAnswer});
           }}
+          ref={currentLevelRef}
         />;
       case 2:
         return <LevelType2 levelData={currentLevelData} levels={levels} currentLevelIndex={currentLevelIndex} />;
