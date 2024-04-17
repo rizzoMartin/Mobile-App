@@ -1,11 +1,10 @@
 import { React, useEffect, useState, forwardRef, useImperativeHandle } from "react";
-import { Text, Pressable, TextInput, Image } from "react-native";
+import { Text, Pressable, TextInput, View, Vibration, Image } from "react-native";
 import { styles } from "../styles/Styles";
 import axios from "axios";
 import ip from '../context/ip';
-import { useAuth } from '../context/AuthContext';
 
-const LevelType3 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setPlaceholder, answer, setAnswer }, ref) => {
+const LevelType3 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setPlaceholder, answer, setAnswer, markAsCorrect, currentLevelIndex, correctAnswers }, ref) => {
   const [localAnswer, setLocalAnswer] = useState(answer);
 
   useEffect(()=> {
@@ -47,6 +46,17 @@ const LevelType3 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setP
     setLocalAnswer(text);
   };
 
+  const checkAnswer = async () => {
+    console.log(localAnswer);
+    const response = await axios.get(`http://${ip}:3000/level/verify-answer?levelId=${levelData.id}&userAnswer=${localAnswer}`);
+    console.log(response.data);
+    if(response.data.solution !== 'respuesta incorrecta') {
+      markAsCorrect(currentLevelIndex);
+    } else {
+      Vibration.vibrate();
+    }
+  }
+
   return(
     <>
       <Image 
@@ -56,12 +66,17 @@ const LevelType3 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setP
       <Pressable style={hintUsed ? styles.buttonDisabled : styles.button} onPress={getHint}>
         <Text>Pista</Text>
       </Pressable>
-      <TextInput 
-        value={localAnswer}
-        onChangeText={(handleTextChange)}
-        placeholder={placeholder}
-        style={styles.inputAnswer}
-      />
+      <View style={styles.inputRow}>
+        <TextInput 
+          value={localAnswer}
+          onChangeText={handleTextChange}
+          style={styles.inputAnswer}
+        />
+        <Pressable style={!correctAnswers[currentLevelIndex] ? styles.buttonCheck : [styles.buttonCheck, {backgroundColor:'#6BFFB1'}]} onPress={checkAnswer}>
+          <Text>✔️</Text>
+        </Pressable>
+      </View>
+      <Text style={styles.hint}>{placeholder}</Text>
     </>
   );
 });

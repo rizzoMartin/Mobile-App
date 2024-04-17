@@ -19,12 +19,13 @@ const LevelScreen = ({ navigation, route }) => {
   const [answers, setAnswers] = useState({});
   const [shuffledOptions, setShuffledOptions] = useState({});
   const currentLevelRef = useRef(null);
+  const [correctAnswers, setCorrectAnswers] = useState({});
 
   useEffect(() => {
     const loadLevels = async () => {
       try {
         setIsLoading(true);
-        const response = await axios.get(`http://${ip}:3000/level/${topicId}/${languageId}`);
+        const response = await axios.get(`http://${ip}:3000/level/levels?topicId=${topicId}&languageId=${languageId}`);
         console.log(response.data);
         const data = response.data.map(level => addHints(level, response.data));
         
@@ -148,6 +149,11 @@ const LevelScreen = ({ navigation, route }) => {
     }
   }
 
+  const markAsCorrect = (index) => {
+    updateAnswerBeforeLeaving();
+    setCorrectAnswers(prev => ({ ...prev, [index]: true }));
+  };
+
   if (isLoading) {
     return <LoadingScreen />;
   }
@@ -199,6 +205,9 @@ const LevelScreen = ({ navigation, route }) => {
           setAnswer={(newAnswer) => {
             setAnswers({...answers, [currentLevelIndex]: newAnswer});
           }}
+          markAsCorrect={markAsCorrect}
+          currentLevelIndex={currentLevelIndex}
+          correctAnswers={correctAnswers}
           ref={currentLevelRef}
         />;
       case 2:
@@ -221,6 +230,9 @@ const LevelScreen = ({ navigation, route }) => {
           setAnswer={(newAnswer) => {
             setAnswers({...answers, [currentLevelIndex]: newAnswer});
           }}
+          markAsCorrect={markAsCorrect}
+          currentLevelIndex={currentLevelIndex}
+          correctAnswers={correctAnswers}
           ref={currentLevelRef}
         />;
     }
@@ -235,7 +247,13 @@ const LevelScreen = ({ navigation, route }) => {
             <Text>Atrás</Text>
           </Pressable>
         )}
-        <Pressable style={[styles.buttonGame, currentLevelIndex < 1 && { flex: 2 }]} onPress={goNextLevel}>
+        <Pressable style={[styles.buttonGame, 
+          currentLevelIndex < 1 && { flex: 2 },
+          !correctAnswers[currentLevelIndex] && !usedHints.has(currentLevelIndex) ? styles.buttonGameDisabled : styles.buttonGame
+        ]} 
+          onPress={goNextLevel}
+          disabled={!correctAnswers[currentLevelIndex] && !usedHints.has(currentLevelIndex)}
+        >
           <Text>Siguiente</Text>
         </Pressable>
       </View>
