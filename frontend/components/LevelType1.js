@@ -3,27 +3,11 @@ import { Text, Pressable, TextInput, View, Vibration } from "react-native";
 import { styles } from "../styles/Styles";
 import axios from "axios";
 import ip from '../context/ip';
-import { useAuth } from '../context/AuthContext';
 
 const LevelType1 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setPlaceholder, answer, setAnswer, markAsCorrect, currentLevelIndex, correctAnswers }, ref) => {
   const [localAnswer, setLocalAnswer] = useState(answer);
   const [translatedWord, setTranslatedWord] = useState('');
   const [incorrectAnswer, setIncorrectAnswer] = useState(null);
-  const { user } = useAuth();
-
-  useEffect(() => {
-    const getWord = async () => {
-      try {
-        const response = await axios.get(`http://${ip}:3000/translation/${levelData.word}/${user.language}`);
-        setTranslatedWord(response.data.message);
-      } catch (error){
-        console.error(error);
-        alert(error.response ? error.response.data.error : error);
-      }
-    };
-
-    getWord();
-  }, [levelData]);
 
   useEffect(()=> {
     if(!placeholder) setPlaceholder('_'.repeat(levelData.word.length));
@@ -47,7 +31,7 @@ const LevelType1 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setP
         // Encuentra todas las posiciones de esta letra en la palabra
         for (let i = 0; i < levelData.word.length; i++) {
           if (levelData.word[i].toLowerCase() === hint.toLowerCase()) {
-            currentPlaceholder[i] = hint; // Reemplaza el guion bajo por la letra correspondiente
+            currentPlaceholder[i] = hint.toLowerCase(); // Reemplaza el guion bajo por la letra correspondiente
           }
         }
       });
@@ -82,7 +66,7 @@ const LevelType1 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setP
 
   return(
     <>
-      <Text style={styles.hint}>{translatedWord}</Text>
+      <Text style={styles.hint}>{levelData.translatedWord}</Text>
       <Pressable 
         style={hintUsed ? styles.buttonDisabled : styles.button}
         onPress={getHint}

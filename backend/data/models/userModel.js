@@ -29,7 +29,7 @@ const User = sequelize.define('user', {
   language: {
     type: DataTypes.STRING(45),
     allowNull: false,
-    defaultValue: 'Spanish'
+    defaultValue: 'es'
   }
 }, {
   tableName: 'user',

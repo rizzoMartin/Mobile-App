@@ -22,7 +22,8 @@ services:
         - ./database/01_init_db.sql:/docker-entrypoint-initdb.d/01_init_db.sql
         - ./database/02_fill_language.sql:/docker-entrypoint-initdb.d/02_fill_language.sql
         - ./database/03_fill_topic.sql:/docker-entrypoint-initdb.d/03_fill_topic.sql
-        - ./database/04_fill_level.sql:/docker-entrypoint-initdb.d/04_fill_level.sql
+        - ./database/04_fill_language_has_topic.sql:/docker-entrypoint-initdb.d/04_fill_language_has_topic.sql
+        - ./database/05_fill_level.sql:/docker-entrypoint-initdb.d/05_fill_level.sql
         - ./database/config/custom_my.cnf:/etc/mysql/conf.d/custom_my.cnf:ro
       ports:
         - 3306:3306

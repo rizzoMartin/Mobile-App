@@ -7,6 +7,7 @@ import LoadingScreen from './LoadingScreen';
 import LevelType1 from "../components/LevelType1";
 import LevelType2 from "../components/levelType2";
 import LevelType3 from "../components/levelType3";
+import { useAuth } from '../context/AuthContext';
 
 const LevelScreen = ({ navigation, route }) => {
   const { topicId, languageId } = route.params;
@@ -20,6 +21,7 @@ const LevelScreen = ({ navigation, route }) => {
   const [shuffledOptions, setShuffledOptions] = useState({});
   const currentLevelRef = useRef(null);
   const [correctAnswers, setCorrectAnswers] = useState({});
+  const { user } = useAuth();
 
   useEffect(() => {
     const loadLevels = async () => {
@@ -35,13 +37,24 @@ const LevelScreen = ({ navigation, route }) => {
             mixedWords[index] = shuffleArray([level.word, ...level.selectedWords]);
           }
         });
+
+        const translatedLevels = await Promise.all(
+          data.map(async (level) => {
+            if (level.type === 1) {
+              // Obtener la traducción de la palabra
+              const response = await axios.get(`http://${ip}:3000/translation/${level.word}/${user.language}`);
+              const translatedWord = response.data.message;
+              return { ...level, translatedWord: translatedWord }; // Reemplazar 'word' con la traducción
+            }
+            return level; // Mantener el nivel sin cambios si no es de tipo 1
+          })
+        );
         
-        setLevels(data);
+        setLevels(translatedLevels);
         setShuffledOptions(mixedWords);
         initializeState(data);
       } catch (error) {
-        console.error(error);
-        alert(error.response ? error.response.data.error : error);
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
@@ -177,12 +190,23 @@ const LevelScreen = ({ navigation, route }) => {
     return Object.keys(correctAnswers).filter(key => correctAnswers[key] === true).length;
   };
   
+  const saveDataAndGoHome = async () => {
+    const data = {
+      user_id: user.id,
+      language_id: languageId,
+      topic_id: topicId,
+      points: countCorrectAnswers()
+    }
+    const response = await axios.post(`http://${ip}:3000/user/points`, data);
+    console.log(response.data.message);
+    navigation.navigate("Home");
+  }
 
   if (isFinished) {
     return (
       <View style={styles.container}>
         <Text>Fin del nivel</Text>
-        <Pressable style={styles.button} onPress={() => navigation.navigate("Home")}>
+        <Pressable style={styles.button} onPress={saveDataAndGoHome}>
           <Text>Volver a Home</Text>
         </Pressable>
         <Text>

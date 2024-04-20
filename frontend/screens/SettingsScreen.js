@@ -8,11 +8,17 @@ import LoginScreen from './LoginScreen';
 import RegisterScreen from './RegisterScreen';
 import HomeScreen from './HomeScreen';
 import { AuthProvider, useAuth } from '../context/AuthContext';
+import { styles } from '../styles/Styles';
 
 const SettingsScreen = () => {
+  const { user, logout } = useAuth();
+
   return (
-    <View>
-        <Text>Settings</Text>
+    <View style={styles.container}>
+      <Text style={styles.text}>{user.email}</Text>
+      <Pressable style={styles.button} onPress={() => logout()}>
+        <Text style={styles.text}>Desconectarse</Text>
+      </Pressable>
     </View>
   );
 };

@@ -27,21 +27,23 @@ const Level = sequelize.define('level', {
     type: DataTypes.STRING(255),
     allowNull: true,
   },
-  topic_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'topic',
-      key: 'id',
-    }
-  },
   language_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'language',
-      key: 'id',
-    }
+      model: 'language_has_topic',
+      key: 'language_id',
+    },
+    primaryKey: true,
+  },
+  topic_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'language_has_topic',
+      key: 'topic_id',
+    },
+    primaryKey: true,
   }
 }, {
   tableName: 'level',

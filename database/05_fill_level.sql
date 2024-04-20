@@ -1,0 +1,20 @@
+USE `TFG`;
+INSERT IGNORE INTO `level` (`solution`, `type`, `word`, `sentence`, `imageUrl`, `topic_id`, `language_id`) VALUES
+('Car', 1, 'Car', 'A _____ is a road vehicle used to carry passengers. It typically has four wheels and is powered by an internal combustion engine.', 'images/vehicles/carro.png', 1, 2),
+('Bicycle', 1, 'Bicycle', 'A _____ is a vehicle with two wheels powered by a person pedaling.', 'images/vehicles/bicicleta.png', 1, 2),
+('Motorcycle', 1, 'Motorcycle', 'A _____ is a two-wheeled vehicle that is powered by a motor.', 'images/vehicles/motocicleta.png', 1, 2),
+('Bus', 2, 'Bus', 'A _____ is a large vehicle designed to carry many passengers.', 'images/vehicles/autobus.png', 1, 2),
+('Truck', 2, 'Truck', 'A _____ is a motor vehicle designed to transport cargo.', 'images/vehicles/camion-de-carga.png', 1, 2),
+('Airplane', 2, 'Airplane', 'An _____ is a powered flying vehicle with fixed wings.', 'images/vehicles/avion.png', 1, 2),
+('Boat', 3, 'Boat', 'A _____ is a watercraft of a large range of types and sizes.', 'images/vehicles/velero.png', 1, 2),
+('Train', 3, 'Train', 'A _____ is a series of connected vehicles that run along a railway track.', 'images/vehicles/subterraneo.png', 1, 2),
+('Helicopter', 3, 'Helicopter', 'A _____ is a type of rotorcraft in which lift and thrust are supplied by horizontally-spinning rotors.', 'images/vehicles/helicoptero.png', 1, 2),
+('Auto', 1, 'Auto', 'Un _____ è un veicolo stradale usato per trasportare passeggeri. Di solito ha quattro ruote ed è alimentato da un motore a combustione interna.', 'images/vehicles/carro.png', 1, 4),
+('Bicicletta', 1, 'Bicicletta', 'Una _____ è un veicolo a due ruote alimentato da una persona che pedala.', 'images/vehicles/bicicleta.png', 1, 4),
+('Motocicletta', 1, 'Motocicletta', 'Una _____ è un veicolo a due ruote alimentato da un motore.', 'images/vehicles/motocicleta.png', 1, 4),
+('Autobus', 2, 'Autobus', 'Un _____ è un grande veicolo progettato per trasportare molti passeggeri.', 'images/vehicles/autobus.png', 1, 4),
+('Camion', 2, 'Camion', 'Un _____ è un veicolo motorizzato progettato per trasportare merci.', 'images/vehicles/camion-de-carga.png', 1, 4),
+('Aereo', 2, 'Aereo', 'Un _____ è un veicolo volante motorizzato con ali fisse.', 'images/vehicles/avion.png', 1, 4),
+('Barca', 3, 'Barca', 'Una _____ è un''imbarcazione di una vasta gamma di tipi e dimensioni.', 'images/vehicles/velero.png', 1, 4),
+('Treno', 3, 'Treno', 'Un _____ è una serie di veicoli collegati che corrono lungo una ferrovia.', 'images/vehicles/subterraneo.png', 1, 4),
+('Elicottero', 3, 'Elicottero', 'Un _____ è un tipo di rotore che genera sollevamento e propulsione attraverso rotori che girano orizzontalmente.', 'images/vehicles/helicoptero.png', 1, 4);

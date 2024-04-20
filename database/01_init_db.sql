@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `TFG`.`user` (
   `email` VARCHAR(45) NOT NULL,
   `password` VARCHAR(255) NOT NULL,
   `admin` TINYINT(1) NOT NULL DEFAULT 0,
-  `language` VARCHAR(45) NOT NULL DEFAULT 'Spanish',
+  `language` VARCHAR(45) NOT NULL DEFAULT 'es',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `username_UNIQUE` (`username` ASC) VISIBLE,
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
@@ -55,6 +55,28 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `TFG`.`language_has_topic`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `TFG`.`language_has_topic` (
+  `language_id` INT NOT NULL,
+  `topic_id` INT NOT NULL,
+  PRIMARY KEY (`language_id`, `topic_id`),
+  INDEX `fk_language_has_topic_topic1_idx` (`topic_id` ASC) VISIBLE,
+  INDEX `fk_language_has_topic_language_idx` (`language_id` ASC) VISIBLE,
+  CONSTRAINT `fk_language_has_topic_language`
+    FOREIGN KEY (`language_id`)
+    REFERENCES `TFG`.`language` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_language_has_topic_topic1`
+    FOREIGN KEY (`topic_id`)
+    REFERENCES `TFG`.`topic` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `TFG`.`level`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `TFG`.`level` (
@@ -64,19 +86,37 @@ CREATE TABLE IF NOT EXISTS `TFG`.`level` (
   `word` VARCHAR(45) NULL,
   `sentence` VARCHAR(255) NULL,
   `imageUrl` VARCHAR(255) NULL,
-  `topic_id` INT NOT NULL,
   `language_id` INT NOT NULL,
-  PRIMARY KEY (`id`, `topic_id`, `language_id`),
-  INDEX `fk_level_topic_idx` (`topic_id` ASC) VISIBLE,
-  INDEX `fk_level_language1_idx` (`language_id` ASC) VISIBLE,
-  CONSTRAINT `fk_level_topic`
-    FOREIGN KEY (`topic_id`)
-    REFERENCES `TFG`.`topic` (`id`)
+  `topic_id` INT NOT NULL,
+  PRIMARY KEY (`id`, `language_id`, `topic_id`),
+  INDEX `fk_level_language_has_topic1_idx` (`language_id` ASC, `topic_id` ASC) VISIBLE,
+  CONSTRAINT `fk_level_language_has_topic1`
+    FOREIGN KEY (`language_id` , `topic_id`)
+    REFERENCES `TFG`.`language_has_topic` (`language_id` , `topic_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `TFG`.`user_points`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `TFG`.`user_points` (
+  `user_id` INT NOT NULL,
+  `language_id` INT NOT NULL,
+  `topic_id` INT NOT NULL,
+  `points` INT NOT NULL DEFAULT 0,
+  PRIMARY KEY (`user_id`, `language_id`, `topic_id`),
+  INDEX `fk_user_has_language_has_topic_language_has_topic1_idx` (`language_id` ASC, `topic_id` ASC) VISIBLE,
+  INDEX `fk_user_has_language_has_topic_user1_idx` (`user_id` ASC) VISIBLE,
+  CONSTRAINT `fk_user_has_language_has_topic_user1`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `TFG`.`user` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_level_language1`
-    FOREIGN KEY (`language_id`)
-    REFERENCES `TFG`.`language` (`id`)
+  CONSTRAINT `fk_user_has_language_has_topic_language_has_topic1`
+    FOREIGN KEY (`language_id` , `topic_id`)
+    REFERENCES `TFG`.`language_has_topic` (`language_id` , `topic_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;

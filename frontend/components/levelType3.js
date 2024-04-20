@@ -30,7 +30,7 @@ const LevelType3 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setP
         // Encuentra todas las posiciones de esta letra en la palabra
         for (let i = 0; i < levelData.word.length; i++) {
           if (levelData.word[i].toLowerCase() === hint.toLowerCase()) {
-            currentPlaceholder[i] = hint; // Reemplaza el guion bajo por la letra correspondiente
+            currentPlaceholder[i] = hint.toLowerCase(); // Reemplaza el guion bajo por la letra correspondiente
           }
         }
       });

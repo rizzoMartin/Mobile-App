@@ -1,6 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../data/models/userModel');
+const UserPoints = require('../data/models/userPointsModel');
+const Language = require('../data/models/languageModel');
+const Topic = require('../data/models/topicModel');
+const LanguageHasTopic = require('../data/models/languageHasTopicModel');
 const router = express.Router();
 
 const saltRounds = 10;
@@ -27,7 +31,7 @@ router.post('/login', async (req, res) => {
 
             if (result) {
                 // Si la comparación es exitosa (las contraseñas coinciden)
-                res.status(200).json({ email: user.email, username: user.username, language: user.language });
+                res.status(200).json({ id: user.id, email: user.email, username: user.username, language: user.language });
             } else {
                 // Si la comparación falla (las contraseñas no coinciden)
                 console.log('Error al comparar contraseñas');
@@ -50,13 +54,21 @@ router.post('/registry', async (req, res) => {
     user_data = req.body;
 
     // Comprobar que no existe un usuario registrado con ese email
-    const existingEmailUser = await User.findOne({ where: { email: user_data.email } });
+    const existingEmailUser = await User.findOne({
+        where: { 
+            email: user_data.email 
+        } 
+    });
     if (existingEmailUser) {
         return res.status(400).json({ error: 'Ya existe un usuario registrado con este email' });
     }
 
     // Comprobar que no existe un usuario registrado con ese username
-    const existingUsernameUser = await User.findOne({ where: { username: user_data.username } });
+    const existingUsernameUser = await User.findOne({
+        where: {
+            username: user_data.username 
+        }
+    });
     if (existingUsernameUser) {
         return res.status(400).json({ error: 'Ya existe un usuario registrado con este username' });
     }
@@ -82,6 +94,83 @@ router.post('/registry', async (req, res) => {
             res.status(500).json({ error:'Error al registrar el usuario' });
         }
     });
+});
+
+router.post('/points', async (req, res) => {
+    user_data = req.body;
+    try {
+        const existingEntry = await UserPoints.findOne({
+            where: {
+                user_id: user_data.user_id,
+                language_id: user_data.language_id,
+                topic_id: user_data.topic_id
+            }
+        });
+
+        if (existingEntry) {
+            if(existingEntry.points < user_data.points) {
+                existingEntry.points = user_data.points;
+                await existingEntry.save();
+                console.log('Usuario con id: ', existingEntry.user_id, ' ha actualizado sus puntos a ', existingEntry.points);
+                res.status(200).json({ message: 'Puntos actualizados correctamente', points: existingEntry.points });
+            } else {
+                res.status(200).json({ message: 'No es necesario actualizar los datos ya que se ha obtenido menor puntuación de la guardada', points: existingEntry.points});
+            }
+        } else {
+            const user = await UserPoints.create({
+                "user_id": user_data.user_id,
+                "language_id": user_data.language_id,
+                "topic_id": user_data.topic_id,
+                "points": user_data.points,
+            });
+            console.log('usuario con id: ', user.user_id, ' ha obtenido ', user.points);
+            res.status(200).json({message: 'Puntos añadidos correctamente', points: user.points});
+        }
+    } catch (error) {
+        console.error('Error al añadir los puntos del usuario:', error);
+        res.status(500).json({error: 'Error al añadir los puntos del usuario' });
+    }
+});
+
+router.get('/points', async (req, res) => {
+    const { user_id } = req.query;
+    try {
+        // Obtener todos los registros de UserPoints para el usuario especificado
+        const user_points = await UserPoints.findAll({
+            where: { user_id }
+        });
+
+        // Recopilar información adicional de LanguageHasTopic, Language, y Topic
+        const results = [];
+        for (const point of user_points) {
+            const language_has_topic = await LanguageHasTopic.findOne({
+                where: {
+                    language_id: point.language_id,
+                    topic_id: point.topic_id
+                }
+            });
+
+            const language = await Language.findOne({
+                where: { id: language_has_topic.language_id }
+            });
+
+            const topic = await Topic.findOne({
+                where: { id: language_has_topic.topic_id }
+            });
+
+            results.push({
+                user_id: point.user_id,
+                language_name: language.displayName,
+                topic_name: topic.topic,
+                points: point.points,
+            });
+        }
+
+        res.status(200).json(results);
+    } catch (error) {
+        console.error('Error al obtener datos del usuario: ', user_id, '\n', error);
+        res.status(500).json({ error: 'Error al obtener los datos del usuario '});
+    }
 });
 
 module.exports = router;

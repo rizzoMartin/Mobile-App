@@ -4,6 +4,8 @@ require('./models/userModel');
 require('./models/languageModel');
 require('./models/topicModel');
 require('./models/levelModel');
+require('./models/languageHasTopicModel');
+require('./models/userPointsModel');
 
 const initDatabase = () => {
   setupAssociations();
