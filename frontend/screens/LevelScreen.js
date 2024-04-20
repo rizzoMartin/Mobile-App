@@ -104,13 +104,16 @@ const LevelScreen = ({ navigation, route }) => {
   const initializeState = (levels) => {
     const newPlaceholders = {};
     const newAnswers = {};
+    const newCorrectAnswers = {};
     levels.forEach((level, index) => {
-      newPlaceholders[index] = '_'.repeat(level.word.length);
-      newAnswers[index] = '';
+        newPlaceholders[index] = '_'.repeat(level.word.length);
+        newAnswers[index] = '';
+        newCorrectAnswers[index] = false;  // Inicializa todos los niveles como incorrectos
     });
     setPlaceholders(newPlaceholders);
     setAnswers(newAnswers);
-  };
+    setCorrectAnswers(newCorrectAnswers);  // Guarda el estado inicializado
+};
 
   const handleUseHint = () => {
     setUsedHints(prevHints => {
@@ -170,6 +173,11 @@ const LevelScreen = ({ navigation, route }) => {
     );
   }
 
+  const countCorrectAnswers = () => {
+    return Object.keys(correctAnswers).filter(key => correctAnswers[key] === true).length;
+  };
+  
+
   if (isFinished) {
     return (
       <View style={styles.container}>
@@ -177,6 +185,9 @@ const LevelScreen = ({ navigation, route }) => {
         <Pressable style={styles.button} onPress={() => navigation.navigate("Home")}>
           <Text>Volver a Home</Text>
         </Pressable>
+        <Text>
+          {countCorrectAnswers()} / {levels.length}
+        </Text>
         <View style={styles.buttonContainer}>
           <Pressable style={styles.buttonGame} onPress={goPreviousLevel}>
             <Text>Atrás</Text>
@@ -216,6 +227,9 @@ const LevelScreen = ({ navigation, route }) => {
           hintUsed={hintUsed}
           useHint={handleUseHint}
           options={shuffledOptions[currentLevelIndex]}
+          markAsCorrect={markAsCorrect}
+          currentLevelIndex={currentLevelIndex}
+          correctAnswers={correctAnswers}
         />;
       case 3:
         return <LevelType3 

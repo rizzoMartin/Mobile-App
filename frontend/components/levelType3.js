@@ -6,6 +6,7 @@ import ip from '../context/ip';
 
 const LevelType3 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setPlaceholder, answer, setAnswer, markAsCorrect, currentLevelIndex, correctAnswers }, ref) => {
   const [localAnswer, setLocalAnswer] = useState(answer);
+  const [incorrectAnswer, setIncorrectAnswer] = useState(null);
 
   useEffect(()=> {
     if(!placeholder) setPlaceholder('_'.repeat(levelData.word.length));
@@ -52,10 +53,16 @@ const LevelType3 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setP
     console.log(response.data);
     if(response.data.solution !== 'respuesta incorrecta') {
       markAsCorrect(currentLevelIndex);
+      setIncorrectAnswer(null);
     } else {
       Vibration.vibrate();
+      setIncorrectAnswer(true);
+      setTimeout(() => {
+        setIncorrectAnswer(null); // Restablece después de un segundo
+      }, 500);
     }
   }
+
 
   return(
     <>
@@ -63,7 +70,11 @@ const LevelType3 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setP
         source={{ uri: `http://${ip}:3000/${levelData.imageUrl}` }}
         style={{ width: 200, height: 200 }}
       />
-      <Pressable style={hintUsed ? styles.buttonDisabled : styles.button} onPress={getHint}>
+      <Pressable 
+        style={hintUsed ? styles.buttonDisabled : styles.button}
+        onPress={getHint}
+        disabled={correctAnswers[currentLevelIndex]}
+      >
         <Text>Pista</Text>
       </Pressable>
       <View style={styles.inputRow}>
@@ -71,12 +82,19 @@ const LevelType3 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setP
           value={localAnswer}
           onChangeText={handleTextChange}
           style={styles.inputAnswer}
+          editable={!correctAnswers[currentLevelIndex]}
         />
-        <Pressable style={!correctAnswers[currentLevelIndex] ? styles.buttonCheck : [styles.buttonCheck, {backgroundColor:'#6BFFB1'}]} onPress={checkAnswer}>
+        <Pressable 
+          style={incorrectAnswer 
+            ? [styles.buttonCheck, { backgroundColor: '#FF4D4D' }] 
+            : !correctAnswers[currentLevelIndex] 
+              ? styles.buttonCheck 
+              : [styles.buttonCheck, { backgroundColor: '#6BFFB1' }]}
+          onPress={checkAnswer}>
           <Text>✔️</Text>
         </Pressable>
       </View>
-      <Text style={styles.hint}>{placeholder}</Text>
+      <Text style={styles.hint}>{correctAnswers[currentLevelIndex] ? localAnswer : placeholder}</Text>
     </>
   );
 });
