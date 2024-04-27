@@ -80,6 +80,7 @@ const LevelType1 = forwardRef(({ levelData, hintUsed, useHint, placeholder, setP
           onChangeText={handleTextChange}
           style={styles.inputAnswer}
           editable={!correctAnswers[currentLevelIndex]}
+          inputMode="text"
         />
         <Pressable 
           style={incorrectAnswer 

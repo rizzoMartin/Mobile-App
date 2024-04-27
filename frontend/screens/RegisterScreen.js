@@ -40,10 +40,10 @@ const RegisterScreen = ({ navigation }) => {
 
   return(
     <View style={styles.container}>
-      <TextInput placeholder="username" style={styles.input} value={username} onChangeText={setUsername} />
-      <TextInput placeholder="email" style={styles.input} value={email} onChangeText={setEmail} />
-      <TextInput placeholder="contraseña" style={styles.input} secureTextEntry value={password} onChangeText={setPassword} />
-      <TextInput placeholder="confirmar contraseña" style={styles.input} secureTextEntry value={confirmedPassword} onChangeText={setConfirmedPassword} />
+      <TextInput placeholder="username" style={styles.input} value={username} onChangeText={setUsername} inputMode="text" />
+      <TextInput placeholder="email" style={styles.input} value={email} onChangeText={setEmail} inputMode="email" />
+      <TextInput placeholder="contraseña" style={styles.input} secureTextEntry value={password} onChangeText={setPassword} inputMode="text" />
+      <TextInput placeholder="confirmar contraseña" style={styles.input} secureTextEntry value={confirmedPassword} onChangeText={setConfirmedPassword} inputMode="text" />
       <View style={styles.pickerContainer}>
         <Picker
           selectedValue={selectedLanguage}

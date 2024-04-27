@@ -30,8 +30,8 @@ const LoginScreen = ({ navigation }) => {
 
   return(
     <View style={styles.container}>
-      <TextInput placeholder="email" style={styles.input} value={email} onChangeText={setEmail} />
-      <TextInput placeholder="contraseña" style={styles.input} secureTextEntry value={password} onChangeText={setPassword} />
+      <TextInput placeholder="email" style={styles.input} value={email} onChangeText={setEmail} inputMode="email" />
+      <TextInput placeholder="contraseña" style={styles.input} secureTextEntry value={password} onChangeText={setPassword} inputMode="text" />
       <Pressable style={styles.button} onPress={ async () => await sendToBack() }>
         <Text style={styles.text}> Iniciar sesión </Text>
       </Pressable>
