@@ -26,8 +26,8 @@ services:
         - ./database/05_fill_level.sql:/docker-entrypoint-initdb.d/05_fill_level.sql
         - ./database/config/custom_my.cnf:/etc/mysql/conf.d/custom_my.cnf:ro
       ports:
-        - 3306:3306
-        - 33060:33060
+        - 3307:3306
+        - 33070:33060
       environment:
         - MYSQL_ROOT_PASSWORD=root
         - MYSQL_DATABASE=TFG
